@@ -43,37 +43,6 @@ def user_login():
 def handle_login():
     """Action for login form; log a user in."""
 
-    email = request.form['email']
-    password = request.form['password']
-
-    user = User(email=email, password=password) #To be used for adding new users
-
-    try:
-        email_user = User.query.filter_by(email=email).one()
-        # password_user = User.query.filter_by(password=password).one()
-        # print password_user
-    except orm.exc.NoResultFound:
-        email_user = None
-        print "Not in db"
-
-    if email_user != None:
-        print "CODE REACHED IF STATEMENT"
-        if password in email_user.password:
-            # session['current_user'] = email
-            flash("Logged in as %s" % email)
-            return redirect("/")
-        else:
-            flash("Wrong password!")
-            return redirect("/login")
-
-    else:
-        print "CODE REACHED ELSE STATEMENT"
-        db.session.add(user)
-        db.session.commit()
-        print "USER ADDED TO DB"
-
-    return render_template("login.html")
-
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point

@@ -17,30 +17,22 @@ class Disaster(db.Model):
 
     __tablename__ = "disasters"
 
-    disaster_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    ihProgramDeclared = db.Column(db.Integer, nullable=True)
-    iaProgramDeclared = db.Column(db.Integer, nullable=True)
-    paProgramDeclared = db.Column(db.Integer, nullable=True)
-    hmProgramDeclared = db.Column(db.Integer, nullable=True)
+    # disaster_id = db.Column(db.Integer, autoincrement=True)
+    disasterNumber = db.Column(db.Integer, nullable=False, primary_key=True)
     state = db.Column(db.String(5), nullable=False)
     declarationDate = db.Column(db.DateTime, nullable=False)
-    disasterType = db.Column(db.String(50), nullable=False)
-    incidentType = db.Column(db.String(50), nullable=False)
+    disasterType = db.Column(db.String(50))
+    incidentType = db.Column(db.String(50))
     title = db.Column(db.String(50), nullable=True)
-    incidentBeginDate = db.Column(db.DateTime, nullable=False)
-    incidentEndDate = db.Column(db.DateTime, nullable=False)
-    disasterCloseOutDate = db.Column(db.DateTime, nullable=True)
+    incidentBeginDate = db.Column(db.DateTime, nullable=True)
+    incidentEndDate = db.Column(db.DateTime, nullable=True)
     placeCode = db.Column(db.String(50), nullable=True)
     declaredCountyArea = db.Column(db.String(50), nullable=True)
-    lastRefresh = db.Column(db.DateTime, nullable=True)
-    md5_hash = db.Column(db.String(50), nullable=True)
-    # FEMA_id = db.Column(db.String(50), nullable=True)
-
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Disaster user_id=%s email=%s>" % (self.user_id, self.email)
+        return "<Disaster state=%s incidentType=%s title=%s incidentBeginDate=%s placeCode=%s declaredCountyArea=%s>" % (self.state, self.incidentType, self.title, self.incidentBeginDate, self.placeCode, self.declaredCountyArea)
 
 
 ##############################################################################
@@ -50,7 +42,7 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configure to use our PstgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///ratings'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///disasters'
     db.app = app
     db.init_app(app)
 
