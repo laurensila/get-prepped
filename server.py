@@ -23,26 +23,85 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage."""
 
+    #drop for state
+    #auto populate counties (if available)
+    #SELECT state, declaredCountyArea, incidentBeginDate, incidentEndDate, title FROM disasters WHERE state = [selected state] AND declaredCountyArea = [selected county];
+
     return render_template("homepage.html")
 
-@app.route("/users")
+@app.route("/disaster_results")
 def user_list():
-    """Show list of users."""
+    """Results of Disaster Query."""
 
-    users = User.query.all()
-    return render_template("user_list.html", users=users)
+    #do a slice on the dates so it cuts off the "times"
+    #re-format date to read as MM-DD-YYYY
 
-@app.route("/login")
-def user_login():
-    """Allow user to login"""
+    return render_template("disaster_results.html")
 
-    #flash user "you are now signed up" OR "you are now logged in"
-    return render_template("login.html")
+@app.route('/register', methods=['GET'])
+def register_form():
+    """Show form for user signup."""
 
-@app.route("/handle-login", methods=['POST'])
-def handle_login():
-    """Action for login form; log a user in."""
+    return render_template("register_form.html")
 
+
+@app.route('/register', methods=['POST'])
+def register_process():
+    """Process registration."""
+
+    # Get form variables
+    email = request.form["email"]
+    password = request.form["password"]
+    age = int(request.form["age"])
+    zipcode = request.form["zipcode"]
+
+    new_user = User(email=email, password=password, age=age, zipcode=zipcode)
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    flash("User %s added." % email)
+    return redirect("/")
+
+
+@app.route('/login', methods=['GET'])
+def login_form():
+    """Show login form."""
+
+    return render_template("login_form.html")
+
+
+@app.route('/login', methods=['POST'])
+def login_process():
+    """Process login."""
+
+    # Get form variables
+    email = request.form["email"]
+    password = request.form["password"]
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        flash("No such user")
+        return redirect("/login")
+
+    if user.password != password:
+        flash("Incorrect password")
+        return redirect("/login")
+
+    session["user_id"] = user.user_id
+
+    flash("Logged in")
+    return redirect("/users/%s" % user.user_id)
+
+
+@app.route('/logout')
+def logout():
+    """Log out."""
+
+    del session["user_id"]
+    flash("Logged Out.")
+    return redirect("/")
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
@@ -53,6 +112,6 @@ if __name__ == "__main__":
 
 
     # Use the DebugToolbar
-    # DebugToolbarExtension(app)
+    DebugToolbarExtension(app)
 
     app.run()

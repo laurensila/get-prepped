@@ -17,23 +17,29 @@ class Disaster(db.Model):
 
     __tablename__ = "disasters"
 
-    # disaster_id = db.Column(db.Integer, autoincrement=True)
-    disasterNumber = db.Column(db.Integer, nullable=False, primary_key=True)
+    hash = db.Column(db.String(100), primary_key=True)
+    disasterNumber = db.Column(db.Integer, nullable=False)
     state = db.Column(db.String(5), nullable=False)
     declarationDate = db.Column(db.DateTime, nullable=False)
-    disasterType = db.Column(db.String(50))
-    incidentType = db.Column(db.String(50))
-    title = db.Column(db.String(50), nullable=True)
+    disasterType = db.Column(db.String(100))
+    incidentType = db.Column(db.String(100))
+    title = db.Column(db.String(100), nullable=True)
     incidentBeginDate = db.Column(db.DateTime, nullable=True)
     incidentEndDate = db.Column(db.DateTime, nullable=True)
-    placeCode = db.Column(db.String(50), nullable=True)
-    declaredCountyArea = db.Column(db.String(50), nullable=True)
+    placeCode = db.Column(db.String(100), nullable=True)
+    declaredCountyArea = db.Column(db.String(100), nullable=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
         return "<Disaster state=%s incidentType=%s title=%s incidentBeginDate=%s placeCode=%s declaredCountyArea=%s>" % (self.state, self.incidentType, self.title, self.incidentBeginDate, self.placeCode, self.declaredCountyArea)
 
+class Territory(db.Model)
+    """States and Territories + Corresponding ABVs."""
+    __tablename__ = "territories"
+
+    state_territory =
+    state_abv =
 
 ##############################################################################
 # Helper functions

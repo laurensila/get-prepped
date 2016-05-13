@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Disasters Form</h2>
+   <form action="/disaster-results">
+        <p><label>
+            <select name="state">
+                <option value="placeholder">-----</option>
+                <option value="ca">CA</option>
+            </select>
+        </label></p>
+        <p></>
+        <p><label>
+            <select name="county">
+                <option value="placeholder">-----</option>
+                <option value="santa clara">Santa Clara</option>
+            </select>
+        </label></p>
+        <p><label>
+            <select name="zip code">
+                <option value="placeholder">-----</option>
+                <option value="95132">95132</option>
+            </select>
+        </label></p>
+        <br>
+        <input type="submit" id="submitbutton">
+    </form>
+
+{% endblock %}
