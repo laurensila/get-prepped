@@ -5,7 +5,7 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import  connect_to_db, db
+from model import User, Territory, Disaster, connect_to_db, db
 from sqlalchemy import func, orm
 
 
@@ -23,46 +23,52 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage."""
 
-    #drop for state
-    #auto populate counties (if available)
-    #SELECT state, declaredCountyArea, incidentBeginDate, incidentEndDate, title FROM disasters WHERE state = [selected state] AND declaredCountyArea = [selected county];
+    counties = ['candyland']
 
-    return render_template("homepage.html")
+    # counties = Disaster.get_counties
+
+    return render_template("homepage.html", counties=counties)
 
 @app.route("/disaster_results")
 def user_list():
     """Results of Disaster Query."""
 
-    #do a slice on the dates so it cuts off the "times"
+    #do a slice on the dates so it cuts off the "time"
     #re-format date to read as MM-DD-YYYY
 
     return render_template("disaster_results.html")
 
-@app.route('/register', methods=['GET'])
+@app.route('/sign-up', methods=['GET'])
 def register_form():
     """Show form for user signup."""
 
-    return render_template("register_form.html")
+    return render_template("new_user_form.html")
 
-
-@app.route('/register', methods=['POST'])
+@app.route('/signed-up', methods=['POST'])
 def register_process():
-    """Process registration."""
+    """Process Signup."""
 
     # Get form variables
     email = request.form["email"]
+    name = request.form["name"]
     password = request.form["password"]
-    age = int(request.form["age"])
-    zipcode = request.form["zipcode"]
+    territory = request.form["territory"]
+    county = request.form["county"]
 
-    new_user = User(email=email, password=password, age=age, zipcode=zipcode)
+    new_user = User(name=name, email=email, password=password, territory=territory, county=county)
 
     db.session.add(new_user)
     db.session.commit()
 
     flash("User %s added." % email)
-    return redirect("/")
+    return redirect("/profile/%s" % new_user.user_id)
 
+@app.route("/profile/<int:user_id>")
+def user_detail(user_id):
+    """Show info about user."""
+
+    user = User.query.get(user_id)
+    return render_template("user_profile.html", user=user)
 
 @app.route('/login', methods=['GET'])
 def login_form():
@@ -94,7 +100,6 @@ def login_process():
     flash("Logged in")
     return redirect("/users/%s" % user.user_id)
 
-
 @app.route('/logout')
 def logout():
     """Log out."""
@@ -104,14 +109,8 @@ def logout():
     return redirect("/")
 
 if __name__ == "__main__":
-    # We have to set debug=True here, since it has to be True at the point
-    # that we invoke the DebugToolbarExtension
-    app.debug = True
-
     connect_to_db(app)
 
-
-    # Use the DebugToolbar
     DebugToolbarExtension(app)
 
-    app.run()
+    app.run(debug=True)

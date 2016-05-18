@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <h1>Hello, {{ user.name }}</h1>
+
+  <p>Email: {{ user.email }}</p>
+  <p>State: {{ user.territory }}</p>
+  <p>County: {{ user.county }}</p>
+
+    <h2>Your Disaster Prep Kit List</h2>
+        <h3>Stay prepped!<h3>
+        <p>At a minimum, you should have the basic supplies listed below:</p>
+            <ul>
+                <li>Water: one gallon per person, per day (3-day supply for evacuation, 2-week supply for home)</li>
+                <li>Food: non-perishable, easy-to-prepare items (3-day supply for evacuation, 2-week supply for home)</li>
+                <li>Flashlight</li>
+                <li>Extra batteries</li>
+                <li>First aid kit</li>
+                <li>Medications (7-day supply) and medical items</li>
+                <li>Multi-purpose tool</li>
+                <li>Sanitation and personal hygiene items</li>
+                <li>Copies of personal documents (medication list and pertinent medical information, proof of address, deed/lease to home, passports, birth certificates, insurance policies)</li>
+                <li>Cell phone with chargers</li>
+                <li>Family and emergency contact information</li>
+                <li>Extra cash</li>
+                <li>Emergency blanket</li>
+                <li>Map(s) of the area</li>
+            </ul>
+
+        <p>Consider the needs of all family members and add supplies to your kit. Suggested items to help meet additional needs are:</p>
+            <ul>
+                <li>Medical supplies (hearing aids with extra batteries, glasses, contact lenses, syringes, etc)Baby supplies (bottles, formula, baby food, diapers)</li>
+                <li>Games and activities for children</li>
+                <li>Pet supplies (collar, leash, ID, food, carrier, bowl)</li>
+                <li>Two-way radios</li>
+                <li>Extra set of car keys and house keys</li>
+                <li>Manual can opener</li>
+            </ul>
+        <p>Additional supplies to keep at home or in your survival kit based on the types of disasters common to your area:</p>
+            <ul>
+                <li>Whistle</li>
+                <li>N95 or surgical masks</li>
+                <li>Matches</li>
+                <li>Rain gear</li>
+                <li>Towels</li>
+                <li>Work gloves</li>
+                <li>Tools/supplies for securing your home</li>
+                <li>Extra clothing, hat and sturdy shoes</li>
+                <li>Plastic sheeting</li>
+                <li>Duct tape</li>
+                <li>Scissors</li>
+                <li>Household liquid bleach</li>
+                <li>Entertainment items</li>
+                <li>Blankets or sleeping bags</li>
+            </ul>
+
+
+{% endblock %}

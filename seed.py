@@ -2,7 +2,7 @@
 
 from sqlalchemy import func
 
-from model import Disaster, connect_to_db, db
+from model import Disaster, Territory, connect_to_db, db
 from server import app
 
 import datetime
@@ -35,7 +35,6 @@ def load_disasters():
     #call again: skip 1k, get 1k
     # while record_count > 36311:
     for incident_dict in disaster_info['DisasterDeclarationsSummaries']:
-        hash = incident_dict.get('hash')
         disasterNumber = incident_dict.get('disasterNumber')
         declarationDate = incident_dict.get('declarationDate')
         state = incident_dict.get('state')
@@ -54,13 +53,35 @@ def load_disasters():
                             incidentBeginDate=incidentBeginDate,
                             incidentEndDate=incidentEndDate,
                             placeCode=placeCode,
-                            declaredCountyArea=declaredCountyArea,
-                            hash=hash)
+                            declaredCountyArea=declaredCountyArea)
 
         db.session.add(disaster)
 
     db.session.commit()
-    print "DB seeded successfully"
+    print "Disasters seeded"
+
+
+def load_territories():
+    """Load Territories into database."""
+
+    print "Territories"
+
+    for row in open("data/states_and_territories.txt"):
+        row  = row.rstrip()
+        piped_rows = row.split("\r")
+        for i in piped_rows:
+            state_info = i.split("|")
+            territory_name = state_info[0]
+            territory_abv = state_info[1]
+
+            territory = Territory(territory_name=territory_name, territory_abv=territory_abv)
+
+            print territory
+
+            db.session.add(territory)
+
+    db.session.commit()
+    print "Territories seeded"
 
 
 if __name__ == "__main__":
@@ -71,3 +92,4 @@ if __name__ == "__main__":
 
     # Import different types of data
     load_disasters()
+    load_territories()

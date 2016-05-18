@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="well spaced" style="width:40%;">
+<h1>Sign-Up!</h1>
+
+<form action="signed-up" method="POST">
+
+    <div>
+        <label>
+            Email
+            <input type="email" name="email">
+        </label>
+    </div>
+
+    <div>
+        <label>
+            Password
+            <input type="password" name="password">
+        </label>
+    </div>
+
+    <div>
+        <label>
+            Name
+            <input type="text" name="name">
+        </label>
+    </div>
+
+    <div>
+        <label>
+            State/U.S. Territory
+            <input type="text" name="territory">
+        </label>
+    </div>
+
+    <div>
+        <label>
+            County (if applicable)
+            <input type="text" name="county">
+        </label>
+    </div>
+
+    <div>
+        <input type="submit" value="Sign-Up">
+    </div>
+
+</form>
+</div>
+{% endblock %}

@@ -1,19 +1,87 @@
 {% extends 'base.html' %}
 {% block content %}
 
+    <p><a href="sign-up">Sign-up</a></p>
+    <p><a href="/login">Login</a></p>
 <h2>Disasters Form</h2>
    <form action="/disaster-results">
         <p><label>
             <select name="state">
                 <option value="placeholder">-----</option>
-                <option value="ca">CA</option>
+                <option value="al">Alabama, AL</option>
+                <option value="ak">Alaska, AK</option>
+                <option value="az">Arizona, AZ</option>
+                <option value="ar">Arkansas, AR</option>
+                <option value="ca">California, CA</option>
+                <option value="co">Colorado, CO</option>
+                <option value="ct">Connecticut, CT</option>
+                <option value="de">Delaware, DE</option>
+                <option value="fl">Florida, FL</option>
+                <option value="ga">Georgia, GA</option>
+                <option value="hi">Hawaii, HI</option>
+                <option value="id">Idaho, ID</option>
+                <option value="il">Illinois, IL</option>
+                <option value="in">Indiana, IN</option>
+                <option value="ia">Iowa, IA</option>
+                <option value="ks">Kansas, KS</option>
+                <option value="ky">Kentucky, KY</option>
+                <option value="la">Louisiana, LA</option>
+                <option value="me">Maine, ME</option>
+                <option value="md">Maryland, MD</option>
+                <option value="ma">Massachusetts, MA</option>
+                <option value="mi">Michigan, MI</option>
+                <option value="mn">Minnesota, MN</option>
+                <option value="mi">Mississippi, MS</option>
+                <option value="mo">Missouri, MO</option>
+                <option value="mt">Montana, MT</option>
+                <option value="ne">Nebraska, NE</option>
+                <option value="nv">Nevada, NV</option>
+                <option value="nh">New Hampshire, NH</option>
+                <option value="nj">New Jersey, NJ</option>
+                <option value="nm">New Mexico, NM</option>
+                <option value="ny">New York, NY</option>
+                <option value="nc">North Carolina, NC</option>
+                <option value="nd">North Dakota, ND</option>
+                <option value="oh">Ohio, OH</option>
+                <option value="ok">Oklahoma, OK</option>
+                <option value="or">Oregon, OR</option>
+                <option value="pa">Pennsylvania, PA</option>
+                <option value="ri">Rhode Island, RI</option>
+                <option value="sc">South Carolina, SC</option>
+                <option value="sd">South Dakota, SD</option>
+                <option value="tn">Tennessee, TN</option>
+                <option value="tx">Texas, TX</option>
+                <option value="ut">Utah, UT</option>
+                <option value="vt">Vermont, VT</option>
+                <option value="va">Virginia, VA</option>
+                <option value="wa">Washington, WA</option>
+                <option value="wv">West Virginia, WV</option>
+                <option value="wi">Wisconsin, WI</option>
+                <option value="wy">Wyoming, WY</option>
+                <option value="as">American Samoa, AS</option>
+                <option value="dc">District of Columbia, DC</option>
+                <option value="fm">Federated States of Micronesia, FM</option>
+                <option value="gu">Guam, GU</option>
+                <option value="mh">Marshall Islands, MH</option>
+                <option value="mp">Northern Mariana Islands, MP</option>
+                <option value="pw">Palau, PW</option>
+                <option value="pr">Puerto Rico, PR</option>
+                <option value="vi">Virgin Islands, VI</option>
+                <option value="ae">Armed Forces Africa, AE</option>
+                <option value="aa">Armed Forces Americas, AA</option>
+                <option value="ae">Armed Forces Canada, AE</option>
+                <option value="ae">Armed Forces Europe, AE</option>
+                <option value="ae">Armed Forces Middle East, AE</option>
+                <option value="ap">Armed Forces Pacific, AP</option>
             </select>
         </label></p>
         <p></>
         <p><label>
             <select name="county">
                 <option value="placeholder">-----</option>
-                <option value="santa clara">Santa Clara</option>
+            {% for counties in counties %}
+                <option value="county">{{ counties }}</option>
+            {% endfor %}
             </select>
         </label></p>
         <p><label>
