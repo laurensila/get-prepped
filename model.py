@@ -19,7 +19,7 @@ class Disaster(db.Model):
 
     disaster_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     disasterNumber = db.Column(db.Integer, nullable=False)
-    state = db.Column(db.String(5), nullable=False)
+    state = db.Column(db.String(5), db.ForeignKey('State.state_code'), nullable=False)
     declarationDate = db.Column(db.DateTime, nullable=False)
     disasterType = db.Column(db.String(100))
     incidentType = db.Column(db.String(100))
@@ -29,29 +29,22 @@ class Disaster(db.Model):
     placeCode = db.Column(db.String(100), nullable=True)
     declaredCountyArea = db.Column(db.String(100), nullable=True)
 
-    def get_counties():
-        county_query = db.session.query(Disaster.declaredCountyArea).distinct()
-        counties = county_query.all()
-    
-        return counties
-
     def __repr__(self):
         """Provide helpful representation when printed."""
 
         return "<Disaster state=%s incidentType=%s title=%s incidentBeginDate=%s placeCode=%s declaredCountyArea=%s>" % (self.state, self.incidentType, self.title, self.incidentBeginDate, self.placeCode, self.declaredCountyArea)
 
-class Territory(db.Model):
+class State(db.Model):
     """States and Territories + Corresponding ABVs."""
     __tablename__ = "territories"
 
-    territory_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    territory_name = db.Column(db.String(50), nullable=False)
-    territory_abv = db.Column(db.String(5), nullable=False)
+    state_name = db.Column(db.String(50), nullable=False)
+    state_code = db.Column(db.String(5), primary_key=True, nullable=False)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Territory territory_name=%s territory_abv=%s>" % (self.territory_name, self.territory_abv)
+        return "<State state_name=%s state_code=%s>" % (self.state_name, self.state_code)
 #
 class User(db.Model):
     """User of Website."""
@@ -62,15 +55,13 @@ class User(db.Model):
     name = db.Column(db.String(64), nullable=True)
     email = db.Column(db.String(64), nullable=False)
     password = db.Column(db.String(64), nullable=False)
-    territory = db.Column(db.String(100), nullable=False)
+    state = db.Column(db.String(100), db.ForeignKey('counties.state') nullable=False)
     county = db.Column(db.String(100), nullable=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
         return "<User user_id=%s email=%s>" % (self.user_id, self.email)
-#
-
 
 ##############################################################################
 # Helper functions

@@ -5,7 +5,7 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import User, Territory, Disaster, connect_to_db, db
+from model import User, Disaster, connect_to_db, db
 from sqlalchemy import func, orm
 
 
@@ -19,24 +19,49 @@ app.secret_key = "ABC"
 app.jinja_env.undefined = StrictUndefined
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     """Homepage."""
 
-    counties = ['candyland']
+    return render_template("homepage.html")
 
-    # counties = Disaster.get_counties
 
-    return render_template("homepage.html", counties=counties)
+@app.route("/disaster-form", methods=['GET'])
+def disaster_form():
+#populate dropdowns with javascript
+    #create a "state" object (dictionary)
+    #the values are going to be your counties
+    #dropdown with state objects
+        #will have an event listener
+    #dropdown with counties (state object values)
+        #keep hidden until
 
-@app.route("/disaster_results")
-def user_list():
+    # query to retrieve list of counties in alphabetical order
+    county_query = db.session.query(Disaster.declaredCountyArea).distinct().order_by(Disaster.declaredCountyArea)
+
+    counties = county_query.all()
+
+    state_query = db.session.query(Disaster.state).distinct().order_by(Disaster.state)
+
+    states = state_query.all()
+
+    # disaster_query = db.session.query(Disaster.incidentType).distinct().order_by(Disaster.incidentType)
+    #
+    # disasters = disaster_query.all()
+
+    return render_template("disaster_form.html", states=states, counties=counties)
+
+@app.route('/disaster-results', methods=['GET'])
+def disaster_results():
     """Results of Disaster Query."""
 
-    #do a slice on the dates so it cuts off the "time"
-    #re-format date to read as MM-DD-YYYY
+    # Get form variables
+    states = request.form["state"]
+    counties = request.form["counties"]
 
-    return render_template("disaster_results.html")
+    disaster_results = db.session.query.filter_by(state=states, declaredCountyArea=counties).all()
+
+    return render_template("disaster_results.html", states=state, declaredCountyArea=counties, disaster_results=disaster_results)
 
 @app.route('/sign-up', methods=['GET'])
 def register_form():
@@ -53,6 +78,7 @@ def register_process():
     name = request.form["name"]
     password = request.form["password"]
     territory = request.form["territory"]
+    #remove county from form - not needed
     county = request.form["county"]
 
     new_user = User(name=name, email=email, password=password, territory=territory, county=county)
@@ -98,7 +124,7 @@ def login_process():
     session["user_id"] = user.user_id
 
     flash("Logged in")
-    return redirect("/users/%s" % user.user_id)
+    return redirect("/profile/%s" % user.user_id)
 
 @app.route('/logout')
 def logout():
@@ -107,6 +133,10 @@ def logout():
     del session["user_id"]
     flash("Logged Out.")
     return redirect("/")
+
+
+
+
 
 if __name__ == "__main__":
     connect_to_db(app)
