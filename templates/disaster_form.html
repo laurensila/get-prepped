@@ -18,7 +18,7 @@
    <form action="/disaster-results", method="GET">
         <p><label>
             <select name="state" id="state">
-                <option value="placeholder">Select State/U.S. Territory</option>
+                <option value="placeholder">Select State</option>
             {% for state in states %}
                 <option value="state" id="states">{{ state }}</option>
             {% endfor %}

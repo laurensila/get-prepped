@@ -77,11 +77,11 @@ def register_process():
     email = request.form["email"]
     name = request.form["name"]
     password = request.form["password"]
-    territory = request.form["territory"]
+    state = request.form["state"]
     #remove county from form - not needed
     county = request.form["county"]
 
-    new_user = User(name=name, email=email, password=password, territory=territory, county=county)
+    new_user = User(name=name, email=email, password=password, state=state, county=county)
 
     db.session.add(new_user)
     db.session.commit()

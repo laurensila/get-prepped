@@ -2,10 +2,6 @@
 
 from flask_sqlalchemy import SQLAlchemy
 
-# This is the connection to the PostgreSQL database; we're getting this through
-# the Flask-SQLAlchemy helper library. On this, we can find the `session`
-# object, where we do most of our interactions (like committing, etc.)
-
 db = SQLAlchemy()
 
 
@@ -19,7 +15,7 @@ class Disaster(db.Model):
 
     disaster_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     disasterNumber = db.Column(db.Integer, nullable=False)
-    state = db.Column(db.String(5), db.ForeignKey('State.state_code'), nullable=False)
+    state = db.Column(db.String(5), db.ForeignKey('states.state_code'))
     declarationDate = db.Column(db.DateTime, nullable=False)
     disasterType = db.Column(db.String(100))
     incidentType = db.Column(db.String(100))
@@ -28,23 +24,42 @@ class Disaster(db.Model):
     incidentEndDate = db.Column(db.DateTime, nullable=True)
     placeCode = db.Column(db.String(100), nullable=True)
     declaredCountyArea = db.Column(db.String(100), nullable=True)
+    countyArea_id = db.Column(db.Integer, db.ForeignKey('counties.county_id'), nullable=True)
+
+    counties = db.relationship('County')
+    states = db.relationship('State')
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
         return "<Disaster state=%s incidentType=%s title=%s incidentBeginDate=%s placeCode=%s declaredCountyArea=%s>" % (self.state, self.incidentType, self.title, self.incidentBeginDate, self.placeCode, self.declaredCountyArea)
 
+class County(db.Model):
+    """Counties with Corresponding State Codes"""
+    __tablename__ = "counties"
+
+    county_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    state_code = db.Column(db.String(5), db.ForeignKey('states.state_code'), nullable=False)
+    county_name = db.Column(db.String(100), nullable=False)
+    
+    states = db.relationship('State')
+
 class State(db.Model):
     """States and Territories + Corresponding ABVs."""
-    __tablename__ = "territories"
+    __tablename__ = "states"
 
-    state_name = db.Column(db.String(50), nullable=False)
-    state_code = db.Column(db.String(5), primary_key=True, nullable=False)
+
+    state_code = db.Column(db.String(5), primary_key=True)
+    state_name = db.Column(db.String(50), nullable=False )
+
+    disasters = db.relationship('Disaster')
+    counties = db.relationship('County')
+
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<State state_name=%s state_code=%s>" % (self.state_name, self.state_code)
+        return "<State state_code=%s state_name=%s>" % (self.state_code, self.state_name)
 #
 class User(db.Model):
     """User of Website."""
@@ -55,8 +70,9 @@ class User(db.Model):
     name = db.Column(db.String(64), nullable=True)
     email = db.Column(db.String(64), nullable=False)
     password = db.Column(db.String(64), nullable=False)
-    state = db.Column(db.String(100), db.ForeignKey('counties.state') nullable=False)
-    county = db.Column(db.String(100), nullable=True)
+    state = db.Column(db.String(100), db.ForeignKey('states.state_code'), nullable=False)
+
+    states = db.relationship('State')
 
     def __repr__(self):
         """Provide helpful representation when printed."""
