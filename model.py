@@ -34,6 +34,10 @@ class Disaster(db.Model):
 
         return "<Disaster state=%s incidentType=%s title=%s incidentBeginDate=%s placeCode=%s declaredCountyArea=%s>" % (self.state, self.incidentType, self.title, self.incidentBeginDate, self.placeCode, self.declaredCountyArea)
 
+    def get_counties(self):
+
+        return self.counties
+
 class County(db.Model):
     """Counties with Corresponding State Codes"""
     __tablename__ = "counties"
@@ -41,8 +45,13 @@ class County(db.Model):
     county_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     state_code = db.Column(db.String(5), db.ForeignKey('states.state_code'), nullable=False)
     county_name = db.Column(db.String(100), nullable=False)
-    
+
     states = db.relationship('State')
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<County state_code=%s county_name=%s>" % (self.state_code, self.state_name)
 
 class State(db.Model):
     """States and Territories + Corresponding ABVs."""

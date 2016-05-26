@@ -5,14 +5,14 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import User, Disaster, connect_to_db, db
+from model import User, Disaster, County, State, connect_to_db, db
 from sqlalchemy import func, orm
 
 
 app = Flask(__name__)
 
 # Required to use Flask sessions and the debug toolbar
-app.secret_key = "ABC"
+app.secret_key = "DISASTER"
 
 # Normally, if you use an undefined variable in Jinja2, it fails silently.
 # This is horrible. Fix this so that, instead, it raises an error.
@@ -28,26 +28,17 @@ def index():
 
 @app.route("/disaster-form", methods=['GET'])
 def disaster_form():
-#populate dropdowns with javascript
-    #create a "state" object (dictionary)
-    #the values are going to be your counties
-    #dropdown with state objects
-        #will have an event listener
-    #dropdown with counties (state object values)
-        #keep hidden until
 
-    # query to retrieve list of counties in alphabetical order
-    county_query = db.session.query(Disaster.declaredCountyArea).distinct().order_by(Disaster.declaredCountyArea)
+    # state_query = db.session.query(Disaster.state).distinct().order_by(Disaster.state)
+    # states = state_query.all()
 
-    counties = county_query.all()
-
-    state_query = db.session.query(Disaster.state).distinct().order_by(Disaster.state)
-
+    state_query = db.session.query(State.state_name).order_by(State.state_name)
     states = state_query.all()
 
-    # disaster_query = db.session.query(Disaster.incidentType).distinct().order_by(Disaster.incidentType)
-    #
-    # disasters = disaster_query.all()
+    county_query = db.session.query(County.county_name).distinct().order_by(County.county_name)
+    counties = county_query.all()
+
+
 
     return render_template("disaster_form.html", states=states, counties=counties)
 
@@ -93,6 +84,7 @@ def register_process():
 def user_detail(user_id):
     """Show info about user."""
 
+    # user = User.query.filter_by(user_id=user_id).first()
     user = User.query.get(user_id)
     return render_template("user_profile.html", user=user)
 
